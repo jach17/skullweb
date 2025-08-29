@@ -34,7 +34,7 @@ body {
 }
 
 .nav-options li a:hover {
-  color: #ff4081;
+  color: #111214;
 }
 
 main {
@@ -67,7 +67,7 @@ h1 {
 
 .menu-toggle {
   display: none;
-  background: #ff4081;
+  background: #111214;
   color: #fff;
   border: none;
   padding: 0.7rem 1.2rem;
