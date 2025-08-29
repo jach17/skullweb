@@ -1,0 +1,22 @@
+body {
+  background: #181818;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+h1 {
+  font-size: 2.5rem;
+  letter-spacing: 2px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; transform: scale(1.05);}
+  100% { opacity: 1; }
+}
