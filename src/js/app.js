@@ -107,4 +107,34 @@ document.addEventListener('DOMContentLoaded', () => {
       modalCatalogImg.src = '';
     }
   });
+
+  document.querySelectorAll('.tipo-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.tipo-btn').forEach(b => b.classList.remove('selected'));
+      this.classList.add('selected');
+      document.getElementById('tipo').value = this.dataset.value;
+    });
+  });
+
+  // Validación para asegurar que se selecciona un tipo antes de enviar
+  document.querySelector('.contact-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const nombre = document.getElementById('nombre').value;
+    const medio = document.getElementById('medio').value;
+    const tipo = document.getElementById('tipo').value;
+    const descripcion = document.getElementById('descripcion').value;
+
+    if (!tipo) {
+      alert('Por favor selecciona el tipo de cotización.');
+      return;
+    }
+
+    const numeroWhatsApp = '527761234940'; // Cambia esto por tu número con código de país (ejemplo México: 5215555555555)
+    const mensaje = encodeURIComponent(
+      `Hola Skull Studio, quiero solicitar una cotización.\n\nNombre: ${nombre}\nMedio de contacto: ${medio}\nTipo de cotización: ${tipo}\nDescripción: ${descripcion}`
+    );
+
+    window.open(`https://wa.me/${numeroWhatsApp}?text=${mensaje}`, '_blank');
+  });
 });
