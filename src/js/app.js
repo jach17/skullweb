@@ -38,4 +38,71 @@ document.addEventListener('DOMContentLoaded', () => {
       }, 700); // Debe coincidir con el tiempo de la transición CSS
     }, 4000);
   }
+
+  // Catálogo dinámico
+  const catalogImages = {
+    tattos: [
+      'assets/tattos/tattoo1.png',
+      'assets/tattos/tattoo2.png',
+      // Agrega más imágenes aquí
+    ],
+    piercing: [
+      'assets/piercing/piercing_01.jpeg',
+      'assets/piercing/piercing_02.jpeg',
+      // Agrega más imágenes aquí
+    ],
+    piezas: [
+      'assets/piezas/pieza1.png',
+      'assets/piezas/pieza2.png',
+      // Agrega más imágenes aquí
+    ]
+  };
+
+  function showCatalog(section) {
+    const container = document.getElementById('catalogImages');
+    container.innerHTML = '';
+    catalogImages[section].forEach(src => {
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = section;
+      container.appendChild(img);
+    });
+  }
+
+  // Inicializar con tattos
+  showCatalog('piercing');
+
+  // Tabs
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      showCatalog(this.dataset.section);
+    });
+  });
+
+  // Modal para catálogo
+  const catalogModal = document.getElementById('catalogModal');
+  const modalCatalogImg = document.getElementById('modalCatalogImg');
+  const closeCatalogModal = document.getElementById('closeCatalogModal');
+
+  document.getElementById('catalogImages').addEventListener('click', function(e) {
+    if (e.target.tagName === 'IMG') {
+      modalCatalogImg.src = e.target.src;
+      catalogModal.style.display = 'flex';
+    }
+  });
+
+  closeCatalogModal.addEventListener('click', () => {
+    catalogModal.style.display = 'none';
+    modalCatalogImg.src = '';
+  });
+
+  // Opcional: cerrar modal al hacer click fuera de la imagen
+  catalogModal.addEventListener('click', (e) => {
+    if (e.target === catalogModal) {
+      catalogModal.style.display = 'none';
+      modalCatalogImg.src = '';
+    }
+  });
 });
