@@ -42,18 +42,20 @@ document.addEventListener('DOMContentLoaded', () => {
   // Catálogo dinámico
   const catalogImages = {
     tattos: [
-      'assets/tattos/tattoo1.png',
-      'assets/tattos/tattoo2.png',
+      'assets/tattos/tatto_01.jpg',
+      // 'assets/tattos/tattoo2.png',
       // Agrega más imágenes aquí
     ],
     piercing: [
       'assets/piercing/piercing_01.jpeg',
       'assets/piercing/piercing_02.jpeg',
+      'assets/piercing/piercing_03.jpeg',
       // Agrega más imágenes aquí
     ],
     piezas: [
-      'assets/piezas/pieza1.png',
-      'assets/piezas/pieza2.png',
+      'assets/piezas/piezas_01.jpg',
+      'assets/piezas/piezas_02.jpg',
+      'assets/piezas/piezas_03.jpg',
       // Agrega más imágenes aquí
     ]
   };
