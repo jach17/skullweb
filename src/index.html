@@ -15,7 +15,7 @@
       <li><a href="#">Inicio</a></li>
       <li><a href="#">Cotiza un diseño</a></li>
       <li><a href="#">Piercing</a></li>
-      <li><a href="#">Catálogo</a></li>
+      <li><a href="#catalogo">Catálogo</a></li>
       <li><a href="#">Nuestros artistas</a></li>
       <li><a href="#">Contáctanos</a></li>
     </ul>
@@ -23,8 +23,21 @@
   <section class="gallery-section">
     <button class="gallery-btn left-btn">Agenda una cita</button>
     <img id="galleryImage" class="gallery-image" src="assets/home_gallery/gallery_01.png" alt="Galería Skull Studio">
-    <button class="gallery-btn right-btn">Visita nuestro catálogo</button>
+    <button class="gallery-btn right-btn" onclick="location.href='#catalogo'">Visita nuestro catálogo</button>
   </section>
+  <section class="catalog-gallery" id="catalogo">
+    <h2>Catálogo</h2>
+    <div class="catalog-tabs">
+      <button class="tab-btn" data-section="tattos">Tattos</button>
+      <button class="tab-btn active" data-section="piercing">Piercing</button>
+      <button class="tab-btn" data-section="piezas">Piezas</button>
+    </div>
+    <div class="catalog-images" id="catalogImages"></div>
+  </section>
+  <div id="catalogModal" class="catalog-modal" style="display:none;">
+    <span class="close-modal" id="closeCatalogModal">&times;</span>
+    <img id="modalCatalogImg" src="" alt="Imagen ampliada">
+  </div>
   <main>
     <h1>Próximamente Skull Studio Web</h1>
   </main>
