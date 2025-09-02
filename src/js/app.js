@@ -137,4 +137,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.open(`https://wa.me/${numeroWhatsApp}?text=${mensaje}`, '_blank');
   });
+
+  // Mostrar navbar desplegado en móviles al cargar
+  if (window.innerWidth <= 600) {
+    document.getElementById('navOptions').classList.add('active');
+  }
 });
