@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Skull Studio Web</title>
   <link rel="stylesheet" href="css/styles.css">
@@ -38,6 +38,29 @@
     <span class="close-modal" id="closeCatalogModal">&times;</span>
     <img id="modalCatalogImg" src="" alt="Imagen ampliada">
   </div>
+  <section class="contact-section" id="contacto">
+    <h2>Solicita tu cotización</h2>
+    <form class="contact-form">
+      <label for="nombre">Nombre de contacto:</label>
+      <input type="text" id="nombre" name="nombre" required>
+
+      <label for="medio">Medio de contacto (WhatsApp, teléfono o correo):</label>
+      <input type="text" id="medio" name="medio" required placeholder="Ejemplo: +52 5555555555 o correo@ejemplo.com">
+
+      <label>Tipo de cotización:</label>
+      <div class="cotizacion-tipo">
+        <button type="button" class="tipo-btn" data-value="Piercing">Piercing</button>
+        <button type="button" class="tipo-btn" data-value="Tatuaje">Tatuaje</button>
+        <button type="button" class="tipo-btn" data-value="Comprar pieza">Comprar pieza</button>
+      </div>
+      <input type="hidden" id="tipo" name="tipo" required>
+
+      <label for="descripcion">Describe lo que quieres (detalles, tamaño, zona, estilo, etc.):</label>
+      <textarea id="descripcion" name="descripcion" rows="4" required placeholder="Cuéntanos tu idea, zona del cuerpo, tamaño aproximado, estilo, colores, etc."></textarea>
+
+      <button type="submit">Envianos un WhatsApp</button>
+    </form>
+  </section>
   <main>
     <h1>Próximamente Skull Studio Web</h1>
   </main>
