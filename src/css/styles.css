@@ -114,9 +114,17 @@ h1 {
 
   .proximamente {
     font-size: 1rem;
-    padding: 0 1rem;
+    padding: 1rem 2rem;
     text-align: center;
   }
+
+  .contact-section {
+    padding: 2rem 1.5rem; /* Más padding horizontal */
+    max-width: 90%;
+    margin: auto;
+  }
+
+
 }
 
 .gallery-section {
