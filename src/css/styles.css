@@ -345,3 +345,10 @@ h1 {
 .tipo-btn:hover {
   background: #ff4081;
 }
+
+.map-section {
+  background: #fff;
+  text-align: center;
+  width: 100%;
+  margin: auto;
+}

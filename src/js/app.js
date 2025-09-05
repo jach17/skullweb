@@ -130,7 +130,8 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    const numeroWhatsApp = '527761234940'; // Cambia esto por tu número con código de país (ejemplo México: 5215555555555)
+    const number = "Nzc2MTIzNDk0MA==";
+    const numeroWhatsApp = atob(number);
     const mensaje = encodeURIComponent(
       `Hola Skull Studio, quiero solicitar una cotización.\n\nNombre: ${nombre}\nMedio de contacto: ${medio}\nTipo de cotización: ${tipo}\nDescripción: ${descripcion}`
     );
