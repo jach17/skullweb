@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const galleryImages = [
     'assets/home_gallery/gallery_01.png',
     'assets/home_gallery/gallery_02.png',
+    'assets/home_gallery/gallery_03.png',
     // Agrega más imágenes si tienes
   ];
   let current = 0;
