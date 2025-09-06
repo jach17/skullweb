@@ -10,7 +10,13 @@
 <body>
   <nav class="navbar">
     <img src="assets/icons/logo.png" alt="Skull Studio Logo" class="logo">
-    <button class="menu-toggle" id="menuToggle">Nuestras opciones</button>
+    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
+      <svg id="hamburgerIcon" width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect y="6" width="28" height="3" rx="1.5" fill="#fff"/>
+        <rect y="13" width="28" height="3" rx="1.5" fill="#fff"/>
+        <rect y="20" width="28" height="3" rx="1.5" fill="#fff"/>
+      </svg>
+    </button>
     <ul class="nav-options" id="navOptions">
       <li><a href="#gallery">Inicio</a></li>
       <li><a href="#contacto">Cotiza un diseño</a></li>
@@ -61,13 +67,46 @@
       <button type="submit">Envianos un WhatsApp</button>
     </form>
   </section>
-    <section class="map-section" id="ubicacion">
+  <section class="map-section" id="ubicacion">
     <h2>Ubicación</h2>
-    <div class="content">
-      <p>Estamos ubicados en Monseñor Guillermo Ledezma y Manjarrez 8, Huauchinango Centro, Mexico</p>
-      <p>Horario: Lunes a Sábado de 11:00 AM a 8:00 PM</p>
-      <p>Teléfono: +52 776 123 49 40</p>
-      <p>Correo: vikronik603@gmail.com
+    <div class="ubicacion-info">
+      <div class="info-block">
+        <span class="icon">
+          <!-- Icono dirección -->
+          <svg width="24" height="24" fill="none"><path d="M12 2C7.03 2 3 6.03 3 11c0 5.25 7.19 10.39 8.12 11.05a1 1 0 0 0 1.13 0C13.81 21.39 21 16.25 21 11c0-4.97-4.03-9-9-9zm0 15a4 4 0 1 1 0-8 4 4 0 0 1 0 8z" fill="#222"/></svg>
+        </span>
+        <div>
+          <strong>Dirección:</strong>
+          <p>Monseñor Guillermo Ledezma y Manjarrez 8, Huauchinango Centro, México</p>
+        </div>
+      </div>
+      <div class="info-block">
+        <span class="icon">
+          <!-- Icono teléfono -->
+          <svg width="24" height="24" fill="none"><path d="M6.62 10.79a15.053 15.053 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.11-.21c1.21.49 2.53.76 3.88.76a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C7.61 21 3 16.39 3 11a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.35.27 2.67.76 3.88a1 1 0 0 1-.21 1.11l-2.2 2.2z" fill="#222"/></svg>
+        </span>
+        <div>
+          <strong>Teléfono:</strong>
+          <p><a href="tel:+527761234940">+52 776 123 49 40</a></p>
+        </div>
+      </div>
+      <div class="info-block">
+        <span class="icon">
+          <!-- Icono redes sociales -->
+          <svg width="24" height="24" fill="none"><circle cx="12" cy="12" r="10" stroke="#222" stroke-width="2"/><path d="M16 8.5a3.5 3.5 0 1 1-7 0" stroke="#222" stroke-width="2"/><circle cx="12" cy="13" r="2" fill="#222"/></svg>
+        </span>
+        <div>
+          <strong>Redes sociales:</strong>
+          <p>
+            <a href="https://wa.me/527761234940" target="_blank" aria-label="WhatsApp">
+              <img src="assets/icons/wa8.png" alt="">
+            </a>
+            <a href="https://instagram.com/skullstudio" target="_blank" aria-label="Instagram">
+              <img src="assets/icons/ig8.png" alt="">
+            </a>
+          </p>
+        </div>
+      </div>
     </div>
     <div class="map-container">
       <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d234.06355465124028!2d-98.0534111298991!3d20.1750228953616!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d08b03171d56fb%3A0xfc262446ed610af3!2sRobertSkull%20Studio!5e0!3m2!1ses-419!2smx!4v1757103023818!5m2!1ses-419!2smx" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>

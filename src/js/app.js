@@ -12,9 +12,22 @@ document.addEventListener('DOMContentLoaded', () => {
   // Menú responsive
   const menuToggle = document.getElementById('menuToggle');
   const navOptions = document.getElementById('navOptions');
-  if (menuToggle && navOptions) {
+  const hamburgerIcon = document.getElementById('hamburgerIcon');
+  if (menuToggle && navOptions && hamburgerIcon) {
     menuToggle.addEventListener('click', () => {
       navOptions.classList.toggle('active');
+      if (navOptions.classList.contains('active')) {
+        hamburgerIcon.innerHTML = `
+          <rect x="6" y="6" width="16" height="3" rx="1.5" fill="#fff" transform="rotate(45 14 14)"/>
+          <rect x="6" y="6" width="16" height="3" rx="1.5" fill="#fff" transform="rotate(-45 14 14)"/>
+        `;
+      } else {
+        hamburgerIcon.innerHTML = `
+          <rect y="6" width="28" height="3" rx="1.5" fill="#fff"/>
+          <rect y="13" width="28" height="3" rx="1.5" fill="#fff"/>
+          <rect y="20" width="28" height="3" rx="1.5" fill="#fff"/>
+        `;
+      }
     });
   }
 
