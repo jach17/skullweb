@@ -57,19 +57,36 @@ document.addEventListener('DOMContentLoaded', () => {
   const catalogImages = {
     tattos: [
       'assets/tattos/tatto_01.jpg',
-      // 'assets/tattos/tattoo2.png',
+      'assets/tattos/tatto_02.jpg',
+      'assets/tattos/tatto_03.jpg',
+      'assets/tattos/tatto_04.jpg',
+      'assets/tattos/tatto_05.jpg',
+      'assets/tattos/tatto_06.jpg',
+      'assets/tattos/tatto_07.jpg',
+      'assets/tattos/tatto_08.jpg',
+      'assets/tattos/tatto_09.jpg',
+      'assets/tattos/tatto_10.jpg',
+      'assets/tattos/tatto_11.jpg',
+      'assets/tattos/tatto_12.jpg',
+      'assets/tattos/tatto_13.jpg',
       // Agrega más imágenes aquí
     ],
     piercing: [
       'assets/piercing/piercing_01.jpeg',
       'assets/piercing/piercing_02.jpeg',
       'assets/piercing/piercing_03.jpeg',
+      'assets/piercing/piercing_04.jpeg',
+      'assets/piercing/piercing_05.jpeg',
+      'assets/piercing/piercing_06.jpeg',
       // Agrega más imágenes aquí
     ],
     piezas: [
       'assets/piezas/piezas_01.jpg',
       'assets/piezas/piezas_02.jpg',
       'assets/piezas/piezas_03.jpg',
+      'assets/piezas/piezas_04.jpg',
+      'assets/piezas/piezas_05.jpg',
+      'assets/piezas/piezas_06.jpg',
       // Agrega más imágenes aquí
     ]
   };
