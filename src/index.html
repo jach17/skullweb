@@ -20,10 +20,10 @@
     <ul class="nav-options" id="navOptions">
       <li><a href="#gallery">Inicio</a></li>
       <li><a href="#contacto">Cotiza un diseño</a></li>
-      <li><a href="#">Piercing</a></li>
+      <li><a href="#catalogo">Piercing</a></li>
       <li><a href="#catalogo">Catálogo</a></li>
-      <li><a href="#">Nuestros artistas</a></li>
-      <li><a href="#">Ubicación</a></li>
+      <li><a href="#ubicacion">Ubicación</a></li>
+      <li><a href="#pagos">Metodo de pago</a></li>
     </ul>
   </nav>
   <section class="gallery-section" id="gallery">
@@ -66,7 +66,7 @@
 
       <button type="submit">Envianos un WhatsApp</button>
     </form>
-  </section>
+  </section> <!-- contact-section -->
   <section class="map-section" id="ubicacion">
     <h2>Ubicación</h2>
     <div class="ubicacion-info">
@@ -118,6 +118,73 @@
       <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d234.06355465124028!2d-98.0534111298991!3d20.1750228953616!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d08b03171d56fb%3A0xfc262446ed610af3!2sRobertSkull%20Studio!5e0!3m2!1ses-419!2smx!4v1757103023818!5m2!1ses-419!2smx" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
   </section>
+    <section class="payments-section" id="pagos">
+    <h2>Métodos de pago</h2>
+    <div class="payments-grid">
+      <div class="payment-card">
+        <h3>Efectivo</h3>
+        <p>Aceptamos pagos en efectivo en el estudio al momento de tu visita.</p>
+      </div>
+
+      <div class="payment-card">
+        <h3>Transferencia bancaria</h3>
+        <p>Puedes realizar una transferencia a la siguiente cuenta. Usa la referencia con tu nombre y tipo de cotización.</p>
+
+        <ul class="transfer-info">
+          <li>
+            <strong>Banco:</strong>
+            <span class="copy-value">BanCoppel</span>
+            <button type="button" class="copy-btn" data-value="Banco Ejemplo" aria-label="Copiar banco">
+              <!-- copy icon -->
+              <svg class="icon-copy" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M16 1H4C2.897 1 2 1.897 2 3v12h2V3h12V1z" fill="currentColor"/>
+                <path d="M20 5H8c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2V7c0-1.103-.897-2-2-2zm0 16H8V7h12v14z" fill="currentColor"/>
+              </svg>
+            </button>
+          </li>
+          <li>
+            <strong>Titular:</strong>
+            <span class="copy-value">Victor Cázares</span>
+            <button type="button" class="copy-btn" data-value="Skull Studio" aria-label="Copiar titular">
+              <svg class="icon-copy" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M16 1H4C2.897 1 2 1.897 2 3v12h2V3h12V1z" fill="currentColor"/>
+                <path d="M20 5H8c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2V7c0-1.103-.897-2-2-2zm0 16H8V7h12v14z" fill="currentColor"/>
+              </svg>
+            </button>
+          </li>
+          <li>
+            <strong>CLABE:</strong>
+            <span class="copy-value">137659102549575645</span>
+            <button type="button" class="copy-btn" data-value="012345678901234567" aria-label="Copiar CLABE">
+              <svg class="icon-copy" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M16 1H4C2.897 1 2 1.897 2 3v12h2V3h12V1z" fill="currentColor"/>
+                <path d="M20 5H8c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2V7c0-1.103-.897-2-2-2zm0 16H8V7h12v14z" fill="currentColor"/>
+              </svg>
+            </button>
+          </li>
+          <li>
+            <strong>Cuenta:</strong>
+            <span class="copy-value">10254957564</span>
+            <button type="button" class="copy-btn" data-value="1234567890" aria-label="Copiar cuenta">
+              <svg class="icon-copy" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M16 1H4C2.897 1 2 1.897 2 3v12h2V3h12V1z" fill="currentColor"/>
+                <path d="M20 5H8c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2V7c0-1.103-.897-2-2-2zm0 16H8V7h12v14z" fill="currentColor"/>
+              </svg>
+            </button>
+          </li>
+        </ul>
+
+      </div>
+
+      <div class="payment-card payment-image-card">
+        <h3>Tarjeta / Información</h3>
+        <p>A continuación una imagen informativa sobre pagos con tarjeta / referencia.</p>
+        <img src="assets/icons/card_info.jpeg" style="max-width: 300px;" alt="Información de tarjeta" class="payment-info-img">
+      </div>
+    </div>
+    <!-- feedback aria-live region -->
+    <div class="copy-feedback" aria-live="polite" aria-atomic="true" id="copyFeedback" style="position: absolute; left:-9999px;"></div>
+  </section>
   <main>
     <h1>Próximamente Skull Studio Web</h1>
   </main>
@@ -131,10 +198,10 @@
         <a href="https://wa.me/527761234940" target="_blank" aria-label="WhatsApp">
           <img src="assets/icons/wa8.png" alt="WhatsApp" width="24" height="24">
         </a>
-        <a href="https://instagram.com/skullstudio" target="_blank" aria-label="Instagram">
+        <a href="https://www.instagram.com/skull_vicko/" target="_blank" aria-label="Instagram">
           <img src="assets/icons/ig8.png" alt="Instagram" width="24" height="24">
         </a>
-        <a href="https://facebook.com/skullstudio" target="_blank" aria-label="Facebook">
+        <a href="https://www.facebook.com/profile.php?id=100028607635054" target="_blank" aria-label="Facebook">
           <img src="assets/icons/fb8.png" alt="Facebook" width="24" height="24">
         </a>
         <a href="https://www.tiktok.com/@skullvicko?_t=ZS-8zcCEoueCQM&_r=1" target="_blank" aria-label="TikTok">
