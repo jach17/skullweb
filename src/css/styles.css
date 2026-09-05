@@ -164,19 +164,6 @@ img {
   width: 100%;
 }
 
-.nav-admin-link {
-  color: var(--text-muted) !important;
-  font-size: 0.8rem !important;
-  text-transform: none !important;
-  opacity: 0.5;
-  transition: opacity var(--transition), color var(--transition) !important;
-}
-
-.nav-admin-link:hover {
-  opacity: 1;
-  color: var(--accent-gold) !important;
-}
-
 .menu-toggle {
   display: none;
   background: transparent;
@@ -860,6 +847,10 @@ img {
 }
 
 .payment-info-img {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  height: auto;
   border-radius: var(--radius-sm);
   margin-top: 0.8rem;
 }
