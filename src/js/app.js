@@ -1,7 +1,6 @@
 /**
  * Skull Studio — Single Page App
- * Store central + Auth + Router + CRUD + Catálogo público
- * Todos los datos en memoria — se pierden al recargar.
+ * Store central + API persistente + Router + CRUD + Catálogo público
  */
 
 /* ============================================================
@@ -9,10 +8,10 @@
    ============================================================ */
 const SkullStore = {
   _nextId: 100,
+  catalogVersion: 0,
 
   categories: ['Tatuajes', 'Piercing', 'Piezas'],
 
-  credentials: { user: 'admin', pass: 'skull2025' },
   isLoggedIn: false,
 
   products: [
@@ -62,48 +61,94 @@ const SkullStore = {
   },
 
   getProductById(id) {
-    return this.products.find(p => p.id === id);
+    return this.products.find(p => String(p.id) === String(id));
   },
 
   addProduct(data) {
-    const product = { id: this._nextId++, ...data, active: data.active !== false };
+    const id = crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${this._nextId++}`;
+    const product = { id, ...data, active: data.active !== false };
     this.products.push(product);
     return product;
   },
 
   updateProduct(id, data) {
-    const idx = this.products.findIndex(p => p.id === id);
+    const idx = this.products.findIndex(p => String(p.id) === String(id));
     if (idx === -1) return null;
     this.products[idx] = { ...this.products[idx], ...data };
     return this.products[idx];
   },
 
   deleteProduct(id) {
-    const idx = this.products.findIndex(p => p.id === id);
+    const idx = this.products.findIndex(p => String(p.id) === String(id));
     if (idx === -1) return false;
     this.products.splice(idx, 1);
     return true;
+  }
+};
+
+const Api = {
+  async request(path, options = {}) {
+    const response = await fetch(path, {
+      credentials: 'same-origin',
+      ...options,
+      headers: {
+        ...(options.body && !(options.body instanceof Blob) ? { 'Content-Type': 'application/json' } : {}),
+        ...(options.headers || {}),
+      },
+    });
+    const body = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      const error = new Error(body.error || 'No se pudo completar la operación.');
+      error.status = response.status;
+      throw error;
+    }
+    return body;
   },
 
-  // ——— Auth ———
-  login(user, pass) {
-    if (user === this.credentials.user && pass === this.credentials.pass) {
-      this.isLoggedIn = true;
-      return true;
-    }
-    return false;
+  getCatalog() {
+    return this.request('/api/catalog');
+  },
+
+  saveCatalog(products, version) {
+    return this.request('/api/catalog', {
+      method: 'PUT',
+      body: JSON.stringify({ products, version }),
+    });
+  },
+
+  login(username, password) {
+    return this.request('/api/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({ username, password }),
+    });
   },
 
   logout() {
-    this.isLoggedIn = false;
-  }
+    return this.request('/api/auth/logout', { method: 'POST' });
+  },
+
+  session() {
+    return this.request('/api/auth/session');
+  },
+
+  uploadImage(file) {
+    return this.request('/api/upload', {
+      method: 'POST',
+      body: file,
+      headers: { 'Content-Type': file.type },
+    });
+  },
+
+  deleteImage(url) {
+    return this.request(`/api/upload?url=${encodeURIComponent(url)}`, { method: 'DELETE' });
+  },
 };
 
 
 /* ============================================================
    2. APP CONTROLLER
    ============================================================ */
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
 
   // ——— DOM References ———
   const $ = (sel) => document.querySelector(sel);
@@ -113,6 +158,40 @@ document.addEventListener('DOMContentLoaded', () => {
   const adminView = $('#adminView');
   const adminLogin = $('#adminLogin');
   const adminDashboard = $('#adminDashboard');
+
+  async function refreshCatalog() {
+    try {
+      const catalog = await Api.getCatalog();
+      if (catalog.initialized && Array.isArray(catalog.products)) {
+        SkullStore.products = catalog.products;
+        SkullStore.catalogVersion = catalog.version;
+      }
+      renderCatalogTabs();
+      renderCatalog();
+    } catch (error) {
+      console.error('No se pudo cargar el catálogo persistente:', error);
+      showToast('Se está mostrando el catálogo local.', 'error');
+    }
+  }
+
+  async function persistProducts(products) {
+    const catalog = await Api.saveCatalog(products, SkullStore.catalogVersion);
+    SkullStore.products = catalog.products;
+    SkullStore.catalogVersion = catalog.version;
+    renderAdminTable();
+    renderAdminStats();
+    renderCatalog();
+  }
+
+  function handleAdminError(error) {
+    if (error.status === 401) {
+      SkullStore.isLoggedIn = false;
+      showAdminLogin();
+      showToast('Tu sesión expiró. Inicia sesión de nuevo.', 'error');
+      return;
+    }
+    showToast(error.message || 'No se pudo completar la operación.', 'error');
+  }
 
   // ——— Toast helper ———
   function showToast(msg, type = 'success') {
@@ -474,21 +553,33 @@ document.addEventListener('DOMContentLoaded', () => {
     renderAdminTable();
   }
 
-  $('#loginForm').addEventListener('submit', (e) => {
+  $('#loginForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const user = $('#loginUser').value.trim();
     const pass = $('#loginPass').value;
+    const button = e.submitter || $('#loginForm button[type="submit"]');
+    button.disabled = true;
+    $('#loginError').textContent = '';
 
-    if (SkullStore.login(user, pass)) {
+    try {
+      await Api.login(user, pass);
+      SkullStore.isLoggedIn = true;
       showAdminDashboard();
       showToast('Sesión iniciada correctamente');
-    } else {
-      $('#loginError').textContent = 'Usuario o contraseña incorrectos';
+    } catch (error) {
+      $('#loginError').textContent = error.message;
+    } finally {
+      button.disabled = false;
     }
   });
 
-  $('#adminLogout').addEventListener('click', () => {
-    SkullStore.logout();
+  $('#adminLogout').addEventListener('click', async () => {
+    try {
+      await Api.logout();
+    } catch (error) {
+      console.error('No se pudo cerrar la sesión en el servidor:', error);
+    }
+    SkullStore.isLoggedIn = false;
     showAdminLogin();
     showToast('Sesión cerrada', 'success');
   });
@@ -575,7 +666,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Bind edit buttons
     tbody.querySelectorAll('[data-edit]').forEach(btn => {
       btn.addEventListener('click', () => {
-        const id = parseInt(btn.dataset.edit, 10);
+        const id = btn.dataset.edit;
         openEditForm(id);
       });
     });
@@ -583,7 +674,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Bind delete buttons
     tbody.querySelectorAll('[data-delete]').forEach(btn => {
       btn.addEventListener('click', async () => {
-        const id = parseInt(btn.dataset.delete, 10);
+        const id = btn.dataset.delete;
         const product = SkullStore.getProductById(id);
         if (!product) return;
 
@@ -593,11 +684,20 @@ document.addEventListener('DOMContentLoaded', () => {
         );
 
         if (confirmed) {
-          SkullStore.deleteProduct(id);
-          renderAdminTable();
-          renderAdminStats();
-          renderCatalog();
-          showToast(`"${product.name}" eliminado`);
+          btn.disabled = true;
+          const products = SkullStore.products.filter(item => String(item.id) !== String(id));
+          try {
+            await persistProducts(products);
+            if (product.imagePath && product.image?.includes('.public.blob.vercel-storage.com')) {
+              Api.deleteImage(product.image).catch(error => {
+                console.error('No se pudo limpiar la imagen anterior:', error);
+              });
+            }
+            showToast(`"${product.name}" eliminado`);
+          } catch (error) {
+            handleAdminError(error);
+            btn.disabled = false;
+          }
         }
       });
     });
@@ -621,7 +721,10 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ============================================================
      14. ADMIN — Add / Edit Product Form
      ============================================================ */
-  let editingImageBase64 = null; // Temp storage for new image
+  let editingImage = '';
+  let editingImagePath = '';
+  let pendingImageFile = null;
+  let previewObjectUrl = '';
 
   $('#addProductBtn').addEventListener('click', () => {
     openNewForm();
@@ -639,7 +742,7 @@ document.addEventListener('DOMContentLoaded', () => {
     $('#imagePreview').src = '';
     $('#formError').classList.add('hidden');
     $('#formSubmitBtn').textContent = 'Crear producto';
-    editingImageBase64 = null;
+    resetImageState();
     showAdminForm();
   }
 
@@ -656,7 +759,9 @@ document.addEventListener('DOMContentLoaded', () => {
     $('#productActive').value = product.active ? 'true' : 'false';
     $('#formSubmitBtn').textContent = 'Guardar cambios';
 
-    editingImageBase64 = product.image || null;
+    resetImageState();
+    editingImage = product.image || '';
+    editingImagePath = product.imagePath || '';
 
     if (product.image) {
       $('#imagePreview').src = product.image;
@@ -670,18 +775,20 @@ document.addEventListener('DOMContentLoaded', () => {
     showAdminForm();
   }
 
-  // Image file → base64
+  // La vista previa es local; el archivo se sube a Blob al guardar.
   $('#productImage').addEventListener('change', function () {
     const file = this.files[0];
     if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      editingImageBase64 = e.target.result;
-      $('#imagePreview').src = editingImageBase64;
-      $('#imagePreview').classList.remove('hidden');
-    };
-    reader.readAsDataURL(file);
+    if (!['image/jpeg', 'image/png', 'image/webp', 'image/avif'].includes(file.type)) {
+      this.value = '';
+      showFormError('Usa una imagen JPG, PNG, WebP o AVIF.');
+      return;
+    }
+    pendingImageFile = file;
+    if (previewObjectUrl) URL.revokeObjectURL(previewObjectUrl);
+    previewObjectUrl = URL.createObjectURL(file);
+    $('#imagePreview').src = previewObjectUrl;
+    $('#imagePreview').classList.remove('hidden');
   });
 
   // Cancel
@@ -690,13 +797,12 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Submit
-  $('#productForm').addEventListener('submit', (e) => {
+  $('#productForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const id = $('#productId').value ? parseInt($('#productId').value, 10) : null;
+    const id = $('#productId').value || null;
     const name = $('#productName').value.trim();
     const description = $('#productDescription').value.trim();
-    const image = editingImageBase64 || '';
     const category = $('#productCategory').value;
     const active = $('#productActive').value === 'true';
 
@@ -709,28 +815,102 @@ document.addEventListener('DOMContentLoaded', () => {
       showFormError('La categoría es obligatoria.');
       return;
     }
-    if (!image && !description) {
+    if (!editingImage && !pendingImageFile && !description) {
       showFormError('Debe tener al menos una imagen o una descripción.');
       return;
     }
 
-    const data = { name, description, image, category, active };
+    const submitButton = $('#formSubmitBtn');
+    submitButton.disabled = true;
+    submitButton.textContent = pendingImageFile ? 'Subiendo imagen…' : 'Guardando…';
+    $('#formError').classList.add('hidden');
 
-    if (id) {
-      // Edit
-      SkullStore.updateProduct(id, data);
-      showToast(`"${name}" actualizado`);
-    } else {
-      // Add
-      SkullStore.addProduct(data);
-      showToast(`"${name}" creado`);
+    let uploadedImage = null;
+    try {
+      if (pendingImageFile) {
+        const optimizedFile = await optimizeImage(pendingImageFile);
+        if (optimizedFile.size > 4 * 1024 * 1024) {
+          throw new Error('La imagen sigue superando 4 MB después de optimizarla.');
+        }
+        uploadedImage = await Api.uploadImage(optimizedFile);
+      }
+
+      const data = {
+        name,
+        description,
+        image: uploadedImage?.url || editingImage || '',
+        imagePath: uploadedImage?.pathname || editingImagePath || '',
+        category,
+        active,
+      };
+      const oldProduct = id ? SkullStore.getProductById(id) : null;
+      let products;
+      if (id) {
+        products = SkullStore.products.map(product =>
+          String(product.id) === String(id) ? { ...product, ...data } : product
+        );
+      } else {
+        const newId = crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}`;
+        products = [...SkullStore.products, { id: newId, ...data, price: '' }];
+      }
+
+      submitButton.textContent = 'Guardando…';
+      await persistProducts(products);
+
+      if (
+        uploadedImage &&
+        oldProduct?.imagePath &&
+        oldProduct.image?.includes('.public.blob.vercel-storage.com')
+      ) {
+        Api.deleteImage(oldProduct.image).catch(error => {
+          console.error('No se pudo limpiar la imagen reemplazada:', error);
+        });
+      }
+
+      showAdminList();
+      resetImageState();
+      showToast(id ? `"${name}" actualizado` : `"${name}" creado`);
+    } catch (error) {
+      if (uploadedImage?.url) {
+        Api.deleteImage(uploadedImage.url).catch(() => {});
+      }
+      if (error.status === 401) handleAdminError(error);
+      else showFormError(error.message || 'No se pudo guardar el producto.');
+    } finally {
+      submitButton.disabled = false;
+      submitButton.textContent = id ? 'Guardar cambios' : 'Crear producto';
     }
-
-    showAdminList();
-    renderAdminTable();
-    renderAdminStats();
-    renderCatalog();
   });
+
+  function resetImageState() {
+    if (previewObjectUrl) URL.revokeObjectURL(previewObjectUrl);
+    previewObjectUrl = '';
+    pendingImageFile = null;
+    editingImage = '';
+    editingImagePath = '';
+  }
+
+  async function optimizeImage(file) {
+    const bitmap = await createImageBitmap(file);
+    const maxDimension = 1920;
+    const scale = Math.min(1, maxDimension / Math.max(bitmap.width, bitmap.height));
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.max(1, Math.round(bitmap.width * scale));
+    canvas.height = Math.max(1, Math.round(bitmap.height * scale));
+    canvas.getContext('2d').drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+    bitmap.close();
+
+    const blob = await new Promise((resolve, reject) => {
+      canvas.toBlob(
+        result => result ? resolve(result) : reject(new Error('No se pudo optimizar la imagen.')),
+        'image/webp',
+        0.84
+      );
+    });
+    return new File([blob], `${file.name.replace(/\.[^.]+$/, '') || 'imagen'}.webp`, {
+      type: 'image/webp',
+    });
+  }
 
   function showFormError(msg) {
     const el = $('#formError');
@@ -744,6 +924,14 @@ document.addEventListener('DOMContentLoaded', () => {
      ============================================================ */
   renderCatalogTabs();
   renderCatalog();
+  await refreshCatalog();
+
+  try {
+    const session = await Api.session();
+    SkullStore.isLoggedIn = session.authenticated;
+  } catch (error) {
+    SkullStore.isLoggedIn = false;
+  }
 
   // Route on load
   if (location.hash === '#/admin') {
